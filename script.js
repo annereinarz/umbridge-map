@@ -21,13 +21,13 @@ fetch('locations.csv')
                     const lon = parseFloat(Longitude);
 
                     if (!isNaN(lat) && !isNaN(lon)) {
-                        // Split links into an array, handling empty or missing links gracefully
-                        const linksArray = Links ? Links.split(';').map(link => link.trim()) : [];
+                        // Split links into an array
+                        const linksArray = Links.split(';').map(link => link.trim());
 
                         // Create HTML for multiple links
-                        const linksHTML = linksArray.length > 0
-                            ? linksArray.map(link => `<a href="${link}" target="_blank">${link}</a>`).join('<br>')
-                            : "No links available";
+                        const linksHTML = linksArray
+                            .map(link => `<a href="${link}" target="_blank">${link}</a>`)
+                            .join('<br>');
 
                         // Create a popup with label and multiple links
                         const popupContent = `
