@@ -7,7 +7,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// Function to load and process the CSV file
+// Load CSV file and parse
 fetch('locations.csv')
     .then(response => response.text())
     .then(csvText => {
@@ -16,33 +16,19 @@ fetch('locations.csv')
             skipEmptyLines: true,
             complete: function(results) {
                 results.data.forEach(row => {
-                    const { Latitude, Longitude, Label, Links } = row;
-                    const lat = parseFloat(Latitude);
-                    const lon = parseFloat(Longitude);
+                    const lat = parseFloat(row.Latitude);
+                    const lon = parseFloat(row.Longitude);
+                    const label = row.Label || 'No Label';
 
                     if (!isNaN(lat) && !isNaN(lon)) {
-                        // Split links into an array, handling empty or missing links gracefully
-                        const linksArray = Links ? Links.split(';').map(link => link.trim()) : [];
-
-                        // Create HTML for multiple links
-                        const linksHTML = linksArray.length > 0
-                            ? linksArray.map(link => `<a href="${link}" target="_blank">${link}</a>`).join('<br>')
-                            : "No links available";
-
-                        // Create a popup with label and multiple links
-                        const popupContent = `
-                            <strong>${Label}</strong><br>
-                            ${linksHTML}
-                        `;
-
-                        // Add a marker with the popup
                         L.marker([lat, lon])
                             .addTo(map)
-                            .bindPopup(popupContent);
+                            .bindPopup(`<strong>${label}</strong>`);
+                    } else {
+                        console.error('Invalid location:', row);
                     }
                 });
             }
         });
     })
     .catch(error => console.error('Error loading CSV:', error));
-
