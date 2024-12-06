@@ -19,15 +19,18 @@ fetch('locations.csv')
                     const lat = parseFloat(row.Latitude);
                     const lon = parseFloat(row.Longitude);
                     const label = row.Label || 'No Label';
+                    const links = row.Links ? row.Links.split(';').map(link => link.trim()) : [];
 
                     if (!isNaN(lat) && !isNaN(lon)) {
-                        L.marker([lat, lon])
-                            .addTo(map)
-                            .bindPopup(`<strong>${label}</strong>`);
+                        const linksHTML = links.map(link => `<a href="${link}" target="_blank">${link}</a>`).join('<br>') || 'No links available';
+
+                    L.marker([lat, lon])
+                        .addTo(map)
+                        .bindPopup(`<strong>${label}</strong><br>${linksHTML}`);
                     } else {
                         console.error('Invalid location:', row);
-                    }
-                });
+                }
+            });
             }
         });
     })
