@@ -19,7 +19,7 @@ Papa.parse('locations.csv', {
                             <strong>${Label}</strong><br>
                             <a href="${Link}" target="_blank">${Link}</a>
                         `;
-                marker.bindPopup(popupContent).openPopup();
+                marker.bindPopup(row.label).openPopup();
             }
         });
     },
