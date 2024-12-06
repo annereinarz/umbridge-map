@@ -13,13 +13,13 @@ Papa.parse('locations.csv', {
     complete: function(results) {
         // Loop through each row in the CSV and add a marker
         results.data.forEach(function(row) {
-            if (row.latitude && row.longitude && row.label) {
+            if (row.latitude && row.longitude && row.label && row.links) {
                 var marker = L.marker([parseFloat(row.latitude), parseFloat(row.longitude)]).addTo(map);
                 const popupContent = `
                             <strong>${Label}</strong><br>
                             <a href="${Link}" target="_blank">${Link}</a>
                         `;
-                marker.bindPopup(row.label).openPopup();
+                marker.bindPopup(popupContent).openPopup();
             }
         });
     },
